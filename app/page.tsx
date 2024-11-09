@@ -295,7 +295,7 @@ const Picker: React.FC<PickerProps> = ({ options, value, onChange, label }) => {
 const CopenhagenMetroOptimizer: React.FC = () => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
-  const [route, setRoute] = useState('Where are you and where are you going?');
+  const [route, setRoute] = useState<string | string[]>('Where are you and where are you going?');
 
   useEffect(() => {
     if (origin && destination) {
