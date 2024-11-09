@@ -2,7 +2,35 @@
 
 import React, { useState, useEffect } from 'react';
 
-const lines = {
+interface Station {
+  name: string;
+  layout: 'A' | 'B';
+}
+
+interface StationType {
+  layout: 'A' | 'B';
+  lines: string[];
+}
+
+interface StationsMap {
+  [key: string]: StationType;
+}
+
+interface LineColors {
+  bg: string;
+  text: string;
+}
+
+interface LineColorMap {
+  [key: string]: LineColors;
+}
+
+interface PathResult {
+  distance: number;
+  instruction: string;
+}
+
+const lines: { [key: string]: Station[] } = {
   M1: [
     { name: 'Vanløse', layout: 'A' },
     { name: 'Flintholm', layout: 'B' },
@@ -69,8 +97,8 @@ const lines = {
   ]
 };
 
-// Create stations object
-const stations = Object.values(lines).flat().reduce((acc, station) => {
+// Create stations object with proper typing
+const stations: StationsMap = Object.values(lines).flat().reduce((acc: StationsMap, station) => {
   if (!acc[station.name]) {
     acc[station.name] = { layout: station.layout, lines: [] };
   }
@@ -86,7 +114,7 @@ Object.entries(lines).forEach(([line, stops]) => {
   });
 });
 
-const getPosition = (start, end, line) => {
+const getPosition = (start: string, end: string, line: string): string => {
   const lineStations = lines[line];
   const startIndex = lineStations.findIndex(s => s.name === start);
   const endIndex = lineStations.findIndex(s => s.name === end);
@@ -97,12 +125,12 @@ const getPosition = (start, end, line) => {
   return position;
 };
 
-const findShortestPath = (start, end) => {
+const findShortestPath = (start: string, end: string): PathResult | null => {
   const commonLines = stations[start].lines.filter(line => stations[end].lines.includes(line));
   
   if (commonLines.length === 0) return null;
 
-  let shortestPath = null;
+  let shortestPath: PathResult | null = null;
   let shortestDistance = Infinity;
 
   commonLines.forEach(line => {
@@ -126,7 +154,7 @@ const findShortestPath = (start, end) => {
   return shortestPath;
 };
 
-const findBestRoute = (start, end) => {
+const findBestRoute = (start: string, end: string): string[] => {
   if (!stations[start] || !stations[end]) {
     return ['Invalid station selection. Please try again.'];
   }
@@ -150,7 +178,7 @@ const findBestRoute = (start, end) => {
   );
 
   // Find the best transfer route
-  let bestRoute = null;
+  let bestRoute: string[] | null = null;
   let shortestDistance = Infinity;
 
   transferStations.forEach(transferStation => {
@@ -173,8 +201,27 @@ const findBestRoute = (start, end) => {
   return bestRoute || ['No suitable route found. Please check the metro map.'];
 };
 
-const LineLabel = ({ line }) => {
-  const colors = {
+interface PickerProps {
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+  label: string;
+}
+
+interface StationInfoProps {
+  station: string;
+}
+
+interface LineLabelProps {
+  line: string;
+}
+
+interface RouteDisplayProps {
+  route: string | string[];
+}
+
+const LineLabel: React.FC<LineLabelProps> = ({ line }) => {
+  const colors: LineColorMap = {
     M1: { bg: '#009E49', text: 'white' },
     M2: { bg: '#FECA0A', text: 'black' },
     M3: { bg: '#EE1C25', text: 'white' },
@@ -198,7 +245,7 @@ const LineLabel = ({ line }) => {
   );
 };
 
-const StationInfo = ({ station }) => {
+const StationInfo: React.FC<StationInfoProps> = ({ station }) => {
   return (
     <div className="mb-2">
       <strong>{station}</strong>
@@ -211,7 +258,7 @@ const StationInfo = ({ station }) => {
   );
 };
 
-const RouteDisplay = ({ route }) => {
+const RouteDisplay: React.FC<RouteDisplayProps> = ({ route }) => {
   if (typeof route === 'string') {
     return <pre className="mt-4 p-2 bg-gray-100 rounded whitespace-pre-wrap text-sm">{route}</pre>;
   }
@@ -225,7 +272,7 @@ const RouteDisplay = ({ route }) => {
   );
 };
 
-const Picker = ({ options, value, onChange, label }) => {
+const Picker: React.FC<PickerProps> = ({ options, value, onChange, label }) => {
   return (
     <div className="flex flex-col items-center">
       <label className="mb-2 font-bold">{label}</label>
@@ -245,7 +292,7 @@ const Picker = ({ options, value, onChange, label }) => {
   );
 };
 
-const CopenhagenMetroOptimizer = () => {
+const CopenhagenMetroOptimizer: React.FC = () => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [route, setRoute] = useState('Where are you and where are you going?');
