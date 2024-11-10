@@ -4,7 +4,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import BScroll from '@better-scroll/core';
 import Wheel from '@better-scroll/wheel';
 
-BScroll.use(Wheel);
+// Initialize BScroll with Wheel plugin outside of component
+if (typeof window !== 'undefined') {
+  BScroll.use(Wheel);
+}
 
 interface StationPickerProps {
   value: string;
@@ -56,7 +59,7 @@ export const StationPicker: React.FC<StationPickerProps> = ({
         setScroll(null);
       }
     };
-  }, [isOpen, options, currentIndex]);
+  }, [isOpen, options, currentIndex, onChange, scroll]);
 
   return (
     <div className="mb-4">
@@ -90,17 +93,13 @@ export const StationPicker: React.FC<StationPickerProps> = ({
             </div>
             
             <div className="relative h-[200px] overflow-hidden">
-              {/* Mask for selected item */}
               <div className="absolute left-0 right-0 top-[50%] transform -translate-y-[50%] h-[40px] border-t border-b border-gray-200 pointer-events-none" />
               
-              {/* Picker wrapper */}
               <div ref={scrollRef} className="h-full">
                 <div className="wheel-scroll">
-                  {/* Empty slots for padding */}
                   <div className="wheel-item h-[80px]" />
                   <div className="wheel-item h-[80px]" />
                   
-                  {/* Actual options */}
                   {options.map((option) => (
                     <div 
                       key={option} 
@@ -110,7 +109,6 @@ export const StationPicker: React.FC<StationPickerProps> = ({
                     </div>
                   ))}
                   
-                  {/* Empty slots for padding */}
                   <div className="wheel-item h-[80px]" />
                   <div className="wheel-item h-[80px]" />
                 </div>
