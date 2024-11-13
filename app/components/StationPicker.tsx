@@ -1,13 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import BScroll from '@better-scroll/core';
-import Wheel from '@better-scroll/wheel';
-
-// Initialize BScroll with Wheel plugin outside of component
-if (typeof window !== 'undefined') {
-  BScroll.use(Wheel);
-}
+import React from 'react';
 
 interface StationPickerProps {
   value: string;
@@ -26,41 +19,6 @@ export const StationPicker: React.FC<StationPickerProps> = ({
   isOpen,
   onToggle
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [scroll, setScroll] = useState<any>(null);
-  const currentIndex = options.indexOf(value) >= 0 ? options.indexOf(value) : 0;
-
-  useEffect(() => {
-    if (isOpen && scrollRef.current && !scroll) {
-      const bs = new BScroll(scrollRef.current, {
-        wheel: {
-          selectedIndex: currentIndex,
-          rotate: 25,
-          adjustTime: 400,
-          wheelWrapperClass: 'wheel-scroll',
-          wheelItemClass: 'wheel-item',
-        },
-        probeType: 3
-      });
-
-      bs.on('wheelIndexChanged', (index: number) => {
-        const selected = options[index];
-        if (selected) {
-          onChange(selected);
-        }
-      });
-
-      setScroll(bs);
-    }
-
-    return () => {
-      if (scroll) {
-        scroll.destroy();
-        setScroll(null);
-      }
-    };
-  }, [isOpen, options, currentIndex, onChange, scroll]);
-
   return (
     <div className="mb-4">
       <div 
@@ -92,26 +50,22 @@ export const StationPicker: React.FC<StationPickerProps> = ({
               </button>
             </div>
             
-            <div className="relative h-[200px] overflow-hidden">
-              <div className="absolute left-0 right-0 top-[50%] transform -translate-y-[50%] h-[40px] border-t border-b border-gray-200 pointer-events-none" />
-              
-              <div ref={scrollRef} className="h-full">
-                <div className="wheel-scroll">
-                  <div className="wheel-item h-[80px]" />
-                  <div className="wheel-item h-[80px]" />
-                  
-                  {options.map((option) => (
-                    <div 
-                      key={option} 
-                      className="wheel-item h-[40px] flex items-center justify-center text-base"
-                    >
-                      {option}
-                    </div>
-                  ))}
-                  
-                  <div className="wheel-item h-[80px]" />
-                  <div className="wheel-item h-[80px]" />
-                </div>
+            <div className="h-[300px] overflow-y-auto">
+              <div className="py-2">
+                {options.map((option) => (
+                  <div 
+                    key={option} 
+                    className={`px-4 py-3 cursor-pointer hover:bg-gray-100 active:bg-gray-200 ${
+                      value === option ? 'bg-blue-50 text-blue-600 font-semibold' : ''
+                    }`}
+                    onClick={() => {
+                      onChange(option);
+                      onToggle();
+                    }}
+                  >
+                    {option}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
