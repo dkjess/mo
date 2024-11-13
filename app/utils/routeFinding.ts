@@ -16,7 +16,7 @@ const getPosition = (start: string, end: string, line: string): string => {
   return position;
 };
 
-export const findShortestPath = (start: string, end: string): PathResult | null => {
+const findShortestPath = (start: string, end: string): PathResult | null => {
   const commonLines = stations[start].lines.filter(line => stations[end].lines.includes(line));
   
   if (commonLines.length === 0) return null;
@@ -36,7 +36,7 @@ export const findShortestPath = (start: string, end: string): PathResult | null 
         const position = getPosition(start, end, line);
         shortestPath = {
           distance: distance,
-          instruction: `Take the ${line} line. Be in the ${position} of the train from ${start} to ${end}.`
+          instruction: `${line} ${position === 'front' ? '🔙' : '🔜'} ${end}`
         };
       }
     }
@@ -45,9 +45,14 @@ export const findShortestPath = (start: string, end: string): PathResult | null 
   return shortestPath;
 };
 
+const createInstruction = (line: string, station: string, position: string): string => {
+  const arrow = position === 'front' ? '🔙' : '🔜';
+  return `${line} ${arrow} ${station}`;
+};
+
 export const findBestRoute = (start: string, end: string): string[] => {
   if (!stations[start] || !stations[end]) {
-    return ['Invalid station selection. Please try again.'];
+    return ['Invalid station selection'];
   }
 
   const startStation = stations[start];
@@ -57,10 +62,10 @@ export const findBestRoute = (start: string, end: string): string[] => {
   const directLine = startStation.lines.find(line => endStation.lines.includes(line));
   if (directLine) {
     const position = getPosition(start, end, directLine);
-    return [`Take the ${directLine} line. Be in the ${position} of the train from ${start} to ${end}.`];
+    return [createInstruction(directLine, end, position)];
   }
 
-  // Find all possible transfer stations
+  // Find transfer route
   const transferStations = Object.keys(stations).filter(station => 
     station !== start && 
     station !== end &&
@@ -68,7 +73,6 @@ export const findBestRoute = (start: string, end: string): string[] => {
     stations[station].lines.some(line => endStation.lines.includes(line))
   );
 
-  // Find the best transfer route
   let bestRoute: string[] | null = null;
   let shortestDistance = Infinity;
 
@@ -80,14 +84,10 @@ export const findBestRoute = (start: string, end: string): string[] => {
       const totalDistance = firstLeg.distance + secondLeg.distance;
       if (totalDistance < shortestDistance) {
         shortestDistance = totalDistance;
-        bestRoute = [
-          `1. ${firstLeg.instruction}`,
-          `2. Transfer at ${transferStation}.`,
-          `3. ${secondLeg.instruction}`
-        ];
+        bestRoute = [firstLeg.instruction, secondLeg.instruction];
       }
     }
   });
 
-  return bestRoute || ['No suitable route found. Please check the metro map.'];
+  return bestRoute || ['No suitable route found'];
 };

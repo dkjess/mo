@@ -27,37 +27,77 @@ const CopenhagenMetroOptimizer: React.FC = () => {
   const allStations = Object.keys(stations).sort();
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">      
-      <div className="grid grid-cols-2 gap-4 mb-6">
+    <div className="p-0 max-w-4xl mx-auto">      
+      <div className="grid grid-cols-2 gap-0 mb-6">
         <div>
-          <div className="h-[60vh] border rounded-lg overflow-y-auto bg-white">
+          <div className="h-[60vh] overflow-y-auto bg-white">
             {allStations.map((station) => (
               <div 
                 key={station} 
                 className={`px-4 py-3 cursor-pointer hover:bg-gray-100 ${
-                  origin === station ? 'bg-blue-50 text-blue-600 font-semibold' : ''
+                  origin === station ? 'bg-blue-50' : ''
                 }`}
                 onClick={() => setOrigin(station)}
               >
-                {station}
-                {origin === station && <StationInfo station={station} />}
+                <div className={origin === station ? 'text-blue-600 font-semibold' : ''}>
+                  {station}
+                </div>
+                <div className="mt-1">
+                  {origin === station && (
+                    <div className="flex gap-1">
+                      {stations[station].lines.map(line => (
+                        <span
+                          key={line}
+                          className={`inline-flex px-2 py-0.5 rounded-full text-sm font-medium
+                            ${line === 'M1' ? 'bg-[#009E49] text-white' : ''}
+                            ${line === 'M2' ? 'bg-[#FECA0A] text-black' : ''}
+                            ${line === 'M3' ? 'bg-[#EE1C25] text-white' : ''}
+                            ${line === 'M4' ? 'bg-[#0090D0] text-white' : ''}
+                          `}
+                        >
+                          {line}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         <div>
-          <div className="h-[60vh] border rounded-lg overflow-y-auto bg-white">
+          <div className="h-[59vh] overflow-y-auto bg-white">
             {allStations.map((station) => (
               <div 
                 key={station} 
                 className={`px-4 py-3 cursor-pointer hover:bg-gray-100 ${
-                  destination === station ? 'bg-blue-50 text-blue-600 font-semibold' : ''
+                  destination === station ? 'bg-blue-50' : ''
                 }`}
                 onClick={() => setDestination(station)}
               >
-                {station}
-                {destination === station && <StationInfo station={station} />}
+                <div className={destination === station ? 'text-blue-600 font-semibold' : ''}>
+                  {station}
+                </div>
+                <div className="mt-1">
+                  {destination === station && (
+                    <div className="flex gap-1">
+                      {stations[station].lines.map(line => (
+                        <span
+                          key={line}
+                          className={`inline-flex px-2 py-0.5 rounded-full text-sm font-medium
+                            ${line === 'M1' ? 'bg-[#009E49] text-white' : ''}
+                            ${line === 'M2' ? 'bg-[#FECA0A] text-black' : ''}
+                            ${line === 'M3' ? 'bg-[#EE1C25] text-white' : ''}
+                            ${line === 'M4' ? 'bg-[#0090D0] text-white' : ''}
+                          `}
+                        >
+                          {line}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
