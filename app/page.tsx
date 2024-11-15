@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { stations } from './data/stations';
 import { findBestRoute } from './utils/routeFinding';
-import { StationInfo } from './components/StationInfo';
 import { RouteDisplay } from './components/RouteDisplay';
 
 const CopenhagenMetroOptimizer: React.FC = () => {
