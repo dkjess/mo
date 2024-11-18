@@ -13,6 +13,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Metro Exit" />
+        
+        <link rel="manifest" href="/manifest.json" />
+        
+        <title>Metro Exit</title>
       </head>
       <body>{children}</body>
     </html>
