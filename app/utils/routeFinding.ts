@@ -5,11 +5,41 @@ interface PathResult {
   instruction: string;
 }
 
+const getPositionForM3 = (start: string, end: string): string => {
+  const m3Stations = lines.M3.map(s => s.name);
+  const startIndex = m3Stations.indexOf(start);
+  const endIndex = m3Stations.indexOf(end);
+  const totalStations = m3Stations.length;
+  
+  // Calculate both possible distances
+  let forwardDistance = endIndex - startIndex;
+  if (forwardDistance < 0) forwardDistance += totalStations;
+  
+  let backwardDistance = startIndex - endIndex;
+  if (backwardDistance < 0) backwardDistance += totalStations;
+  
+  // Use the shorter distance to determine direction
+  const movingForward = forwardDistance <= backwardDistance;
+  
+  // If we're moving forward and destination has layout B, we want back of train
+  // If we're moving backward and destination has layout A, we want back of train
+  if (movingForward) {
+    return stations[end].layout === 'B' ? 'back' : 'front';
+  } else {
+    return stations[end].layout === 'B' ? 'front' : 'back';
+  }
+};
+
 const getPosition = (start: string, end: string, line: string): string => {
+  // Special handling for M3 line
+  if (line === 'M3') {
+    return getPositionForM3(start, end);
+  }
+  
+  // Regular handling for other lines
   const lineStations = lines[line].map(s => s.name);
   const startIndex = lineStations.indexOf(start);
   const endIndex = lineStations.indexOf(end);
-  
   const movingForward = startIndex < endIndex;
 
   if (movingForward) {
@@ -19,10 +49,26 @@ const getPosition = (start: string, end: string, line: string): string => {
   }
 };
 
-// Simplified to just create the instruction string
+const getDistance = (start: string, end: string, line: string): number => {
+  const lineStations = lines[line].map(s => s.name);
+  const startIndex = lineStations.indexOf(start);
+  const endIndex = lineStations.indexOf(end);
+  
+  if (line === 'M3') {
+    const totalStations = lineStations.length;
+    let forwardDistance = endIndex - startIndex;
+    if (forwardDistance < 0) forwardDistance += totalStations;
+    
+    let backwardDistance = startIndex - endIndex;
+    if (backwardDistance < 0) backwardDistance += totalStations;
+    
+    return Math.min(forwardDistance, backwardDistance);
+  }
+  
+  return Math.abs(endIndex - startIndex);
+};
+
 const createInstruction = (line: string, station: string, position: string): string => {
-  // Let's add a console.log to debug
-  console.log(`Creating instruction for ${line} to ${station}, position: ${position}`);
   return `${line} ${position === 'front' ? '→' : '←'} ${station}`;
 };
 
@@ -35,20 +81,14 @@ const findShortestPath = (start: string, end: string): PathResult | null => {
   let shortestDistance = Infinity;
 
   commonLines.forEach(line => {
-    const lineStations = lines[line].map(s => s.name);
-    const startIndex = lineStations.indexOf(start);
-    const endIndex = lineStations.indexOf(end);
-    
-    if (startIndex !== -1 && endIndex !== -1) {
-      const distance = Math.abs(endIndex - startIndex);
-      if (distance < shortestDistance) {
-        shortestDistance = distance;
-        const position = getPosition(start, end, line);
-        shortestPath = {
-          distance,
-          instruction: createInstruction(line, end, position)
-        };
-      }
+    const distance = getDistance(start, end, line);
+    if (distance < shortestDistance) {
+      shortestDistance = distance;
+      const position = getPosition(start, end, line);
+      shortestPath = {
+        distance,
+        instruction: createInstruction(line, end, position)
+      };
     }
   });
 
