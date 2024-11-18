@@ -6,14 +6,24 @@ interface PathResult {
 }
 
 const getPosition = (start: string, end: string, line: string): string => {
-  const lineStations = lines[line];
-  const startIndex = lineStations.findIndex(s => s.name === start);
-  const endIndex = lineStations.findIndex(s => s.name === end);
-  const direction = startIndex < endIndex ? 'forward' : 'backward';
-  const position = direction === 'forward' ? 
-    (stations[end].layout === 'A' ? 'front' : 'back') :
-    (stations[end].layout === 'A' ? 'back' : 'front');
-  return position;
+  const lineStations = lines[line].map(s => s.name);
+  const startIndex = lineStations.indexOf(start);
+  const endIndex = lineStations.indexOf(end);
+  
+  const movingForward = startIndex < endIndex;
+
+  if (movingForward) {
+    return stations[end].layout === 'B' ? 'back' : 'front';
+  } else {
+    return stations[end].layout === 'B' ? 'front' : 'back';
+  }
+};
+
+// Simplified to just create the instruction string
+const createInstruction = (line: string, station: string, position: string): string => {
+  // Let's add a console.log to debug
+  console.log(`Creating instruction for ${line} to ${station}, position: ${position}`);
+  return `${line} ${position === 'front' ? '→' : '←'} ${station}`;
 };
 
 const findShortestPath = (start: string, end: string): PathResult | null => {
@@ -25,9 +35,9 @@ const findShortestPath = (start: string, end: string): PathResult | null => {
   let shortestDistance = Infinity;
 
   commonLines.forEach(line => {
-    const lineStations = lines[line];
-    const startIndex = lineStations.findIndex(s => s.name === start);
-    const endIndex = lineStations.findIndex(s => s.name === end);
+    const lineStations = lines[line].map(s => s.name);
+    const startIndex = lineStations.indexOf(start);
+    const endIndex = lineStations.indexOf(end);
     
     if (startIndex !== -1 && endIndex !== -1) {
       const distance = Math.abs(endIndex - startIndex);
@@ -35,19 +45,14 @@ const findShortestPath = (start: string, end: string): PathResult | null => {
         shortestDistance = distance;
         const position = getPosition(start, end, line);
         shortestPath = {
-          distance: distance,
-          instruction: `${line} ${position === 'front' ? '🔙' : '🔜'} ${end}`
+          distance,
+          instruction: createInstruction(line, end, position)
         };
       }
     }
   });
 
   return shortestPath;
-};
-
-const createInstruction = (line: string, station: string, position: string): string => {
-  const arrow = position === 'front' ? '🔙' : '🔜';
-  return `${line} ${arrow} ${station}`;
 };
 
 export const findBestRoute = (start: string, end: string): string[] => {

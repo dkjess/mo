@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { stations } from './data/stations';
 import { findBestRoute } from './utils/routeFinding';
+import { StationInfo } from './components/StationInfo';
 import { RouteDisplay } from './components/RouteDisplay';
 
 const CopenhagenMetroOptimizer: React.FC = () => {
@@ -26,84 +27,44 @@ const CopenhagenMetroOptimizer: React.FC = () => {
   const allStations = Object.keys(stations).sort();
 
   return (
-    <div className="p-0 max-w-4xl mx-auto">      
-      <div className="grid grid-cols-2 gap-0 mb-6">
-        <div>
-          <div className="h-[60vh] overflow-y-auto bg-white">
-            {allStations.map((station) => (
-              <div 
-                key={station} 
-                className={`px-4 py-3 cursor-pointer hover:bg-gray-100 ${
-                  origin === station ? 'bg-blue-50' : ''
-                }`}
-                onClick={() => setOrigin(station)}
-              >
-                <div className={origin === station ? 'text-blue-600 font-semibold' : ''}>
-                  {station}
-                </div>
-                <div className="mt-1">
-                  {origin === station && (
-                    <div className="flex gap-1">
-                      {stations[station].lines.map(line => (
-                        <span
-                          key={line}
-                          className={`inline-flex px-2 py-0.5 rounded-full text-sm font-medium
-                            ${line === 'M1' ? 'bg-[#009E49] text-white' : ''}
-                            ${line === 'M2' ? 'bg-[#FECA0A] text-black' : ''}
-                            ${line === 'M3' ? 'bg-[#EE1C25] text-white' : ''}
-                            ${line === 'M4' ? 'bg-[#0090D0] text-white' : ''}
-                          `}
-                        >
-                          {line}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="h-[100dvh] grid grid-rows-[env(safe-area-inset-top)_1fr_auto] font-[-apple-system,BlinkMacSystemFont,system-ui,sans-serif]">
+      <div className="bg-gray-50 dark:bg-black" /> {/* Status bar space */}
+      
+      <div className="grid grid-cols-2 min-h-0">
+        <div className="overflow-y-auto bg-gray-50 dark:bg-black">
+          {allStations.map((station) => (
+            <div 
+              key={station} 
+              className={`px-4 py-3 cursor-pointer transition-colors text-[17px] leading-[22px]
+                ${origin === station 
+                  ? 'bg-gray-100 dark:bg-gray-900 text-black dark:text-white' 
+                  : 'text-gray-900 dark:text-gray-100 active:bg-gray-100 dark:active:bg-gray-900'}`}
+              onClick={() => setOrigin(station)}
+            >
+              {station}
+              {origin === station && <StationInfo station={station} />}
+            </div>
+          ))}
         </div>
 
-        <div>
-          <div className="h-[59vh] overflow-y-auto bg-white">
-            {allStations.map((station) => (
-              <div 
-                key={station} 
-                className={`px-4 py-3 cursor-pointer hover:bg-gray-100 ${
-                  destination === station ? 'bg-blue-50' : ''
-                }`}
-                onClick={() => setDestination(station)}
-              >
-                <div className={destination === station ? 'text-blue-600 font-semibold' : ''}>
-                  {station}
-                </div>
-                <div className="mt-1">
-                  {destination === station && (
-                    <div className="flex gap-1">
-                      {stations[station].lines.map(line => (
-                        <span
-                          key={line}
-                          className={`inline-flex px-2 py-0.5 rounded-full text-sm font-medium
-                            ${line === 'M1' ? 'bg-[#009E49] text-white' : ''}
-                            ${line === 'M2' ? 'bg-[#FECA0A] text-black' : ''}
-                            ${line === 'M3' ? 'bg-[#EE1C25] text-white' : ''}
-                            ${line === 'M4' ? 'bg-[#0090D0] text-white' : ''}
-                          `}
-                        >
-                          {line}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="overflow-y-auto bg-gray-50 dark:bg-black">
+          {allStations.map((station) => (
+            <div 
+              key={station} 
+              className={`px-4 py-3 cursor-pointer transition-colors text-[17px] leading-[22px]
+                ${destination === station 
+                  ? 'bg-gray-100 dark:bg-gray-900 text-black dark:text-white' 
+                  : 'text-gray-900 dark:text-gray-100 active:bg-gray-100 dark:active:bg-gray-900'}`}
+              onClick={() => setDestination(station)}
+            >
+              {station}
+              {destination === station && <StationInfo station={station} />}
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="bg-gray-50 dark:bg-black pb-[env(safe-area-inset-bottom)]">
         <RouteDisplay route={route} />
       </div>
     </div>

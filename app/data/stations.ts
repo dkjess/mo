@@ -31,8 +31,8 @@ export interface Station {
   export const lines: { [key: string]: Station[] } = {
     M1: [
       { name: 'Vanløse', layout: 'A' },
-      { name: 'Flintholm', layout: 'B' },
-      { name: 'Lindevang', layout: 'A' },
+      { name: 'Flintholm', layout: 'A' },
+      { name: 'Lindevang', layout: 'B' },
       { name: 'Fasanvej', layout: 'B' },
       { name: 'Frederiksberg', layout: 'A' },
       { name: 'Forum', layout: 'B' },
@@ -48,8 +48,8 @@ export interface Station {
     ],
     M2: [
       { name: 'Vanløse', layout: 'A' },
-      { name: 'Flintholm', layout: 'B' },
-      { name: 'Lindevang', layout: 'A' },
+      { name: 'Flintholm', layout: 'A' },
+      { name: 'Lindevang', layout: 'B' },
       { name: 'Fasanvej', layout: 'B' },
       { name: 'Frederiksberg', layout: 'A' },
       { name: 'Forum', layout: 'B' },
@@ -77,7 +77,7 @@ export interface Station {
       { name: 'Skjolds Plads', layout: 'B' },
       { name: 'Nørrebro', layout: 'A' },
       { name: 'Nørrebros Runddel', layout: 'B' },
-      { name: 'Nuuks Plads', layout: 'A' },
+      { name: 'Nuuks Plads', layout: 'B' },
       { name: 'Aksel Møllers Have', layout: 'B' },
       { name: 'Frederiksberg', layout: 'A' },
       { name: 'Frederiksberg Allé', layout: 'B' },
