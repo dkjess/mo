@@ -28,7 +28,7 @@ const CopenhagenMetroOptimizer: React.FC = () => {
 
   return (
     <div className="h-[100dvh] grid grid-rows-[env(safe-area-inset-top)_1fr_auto] font-[-apple-system,BlinkMacSystemFont,system-ui,sans-serif]">
-      <div className="bg-gray-50 dark:bg-black" /> {/* Status bar space */}
+      <div className="bg-gray-50 dark:bg-black" />
       
       <div className="grid grid-cols-2 min-h-0">
         <div className="overflow-y-auto bg-gray-50 dark:bg-black">
@@ -37,7 +37,7 @@ const CopenhagenMetroOptimizer: React.FC = () => {
               key={station} 
               className={`px-4 py-3 cursor-pointer transition-colors text-[17px] leading-[22px]
                 ${origin === station 
-                  ? 'bg-gray-100 dark:bg-gray-900 text-black dark:text-white' 
+                  ? 'bg-gray-100 dark:bg-gray-900 text-black dark:text-white font-semibold' 
                   : 'text-gray-900 dark:text-gray-100 active:bg-gray-100 dark:active:bg-gray-900'}`}
               onClick={() => setOrigin(station)}
             >
@@ -53,7 +53,7 @@ const CopenhagenMetroOptimizer: React.FC = () => {
               key={station} 
               className={`px-4 py-3 cursor-pointer transition-colors text-[17px] leading-[22px]
                 ${destination === station 
-                  ? 'bg-gray-100 dark:bg-gray-900 text-black dark:text-white' 
+                  ? 'bg-gray-100 dark:bg-gray-900 text-black dark:text-white font-semibold' 
                   : 'text-gray-900 dark:text-gray-100 active:bg-gray-100 dark:active:bg-gray-900'}`}
               onClick={() => setDestination(station)}
             >
@@ -64,7 +64,7 @@ const CopenhagenMetroOptimizer: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-black pb-[env(safe-area-inset-bottom)]">
+      <div className="bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800 pb-[env(safe-area-inset-bottom)]">
         <RouteDisplay route={route} />
       </div>
     </div>
