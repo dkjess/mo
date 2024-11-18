@@ -84,14 +84,19 @@ export interface Station {
       { name: 'Enghave Plads', layout: 'A' }
     ],
     M4: [
-      { name: 'Københavns Hovedbanegård', layout: 'A' },
-      { name: 'Rådhuspladsen', layout: 'B' },
-      { name: 'Gammel Strand', layout: 'A' },
-      { name: 'Kongens Nytorv', layout: 'B' },
-      { name: 'Marmorkirken', layout: 'A' },
-      { name: 'Østerport', layout: 'B' },
+      { name: 'Orientkaj', layout: 'B' },
       { name: 'Nordhavn', layout: 'A' },
-      { name: 'Orientkaj', layout: 'B' }
+      { name: 'Østerport', layout: 'B' },
+      { name: 'Marmorkirken', layout: 'A' },
+      { name: 'Kongens Nytorv', layout: 'B' },
+      { name: 'Gammel Strand', layout: 'A' },
+      { name: 'Rådhuspladsen', layout: 'B' },
+      { name: 'Københavns Hovedbanegård', layout: 'A' },
+      { name: 'Havneholmen', layout: 'B' },
+      { name: 'Enghave Brygge', layout: 'A' },
+      { name: 'Sluseholmen', layout: 'B' },
+      { name: 'Mozarts Plads', layout: 'A' },
+      { name: 'København Syd', layout: 'B' }
     ]
   };
   
