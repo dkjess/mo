@@ -1,5 +1,5 @@
 import React from 'react';
-import { stations, lineColors } from '../data/stations';
+import { stations } from '../data/stations';
 
 interface StationInfoProps {
   station: string;
