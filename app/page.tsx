@@ -64,8 +64,9 @@ const CopenhagenMetroOptimizer: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800 pb-[env(safe-area-inset-bottom)]">
+      <div className="bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800">
         <RouteDisplay route={route} />
+        <div className="h-[calc(env(safe-area-inset-bottom)+16px)]" />
       </div>
     </div>
   );
