@@ -17,7 +17,7 @@ export default function RootLayout({
         
         <link rel="manifest" href="/manifest.json" />
         
-        <title>Metro Exit</title>
+        <title>Turbo Tube</title>
       </head>
       <body>{children}</body>
     </html>
