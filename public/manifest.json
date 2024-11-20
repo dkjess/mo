@@ -1,6 +1,6 @@
 {
-  "name": "Metro Exit",
-  "short_name": "Metro Exit",
+  "name": "Turbo Tube",
+  "short_name": "Turbo Tube",
   "description": "Find the best exit position on Copenhagen Metro",
   "start_url": "/",
   "display": "standalone",
